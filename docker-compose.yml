@@ -1,0 +1,13 @@
+services:
+  app: 
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: /bin/sh -c "script/run-dev"
+    volumes: 
+      - ./:/rails
+    ports: 
+      - 3000:3000
+    tty: true
+    environment:
+      RAILS_ENV: development

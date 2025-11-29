@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :review do
-    book { nil }
-    user { nil }
+    book { create(:book) }
+    user { create(:user) }
     rating { 1 }
     body { "MyText" }
   end

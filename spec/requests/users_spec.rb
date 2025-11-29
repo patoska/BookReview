@@ -15,7 +15,7 @@ RSpec.describe "Users", type: :request do
     end
   end
 
-  describe "GET /users/:id" do    
+  describe "GET /users/:id" do
     it "returns correct user" do
       user1 = create(:user)
       user2 = create(:user)

@@ -15,7 +15,7 @@ RSpec.describe "Reviews", type: :request do
     end
   end
 
-  describe "GET /reviews/:id" do    
+  describe "GET /reviews/:id" do
     it "returns correct review" do
       review1 = create(:review)
       review2 = create(:review)

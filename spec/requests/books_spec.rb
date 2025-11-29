@@ -15,7 +15,7 @@ RSpec.describe "Books", type: :request do
     end
   end
 
-  describe "GET /books/:id" do    
+  describe "GET /books/:id" do
     it "returns correct book" do
       book1 = create(:book)
       book2 = create(:book)

@@ -3,7 +3,17 @@ class BooksController < ApplicationController
 
   # GET /books
   def index
-    render json: Book.all
+    render json: Book.left_joins(reviews: :user)
+      .select(
+        "books.*,
+        CASE
+          WHEN SUM(CASE WHEN users.status != 1 THEN 1 ELSE 0 END) < 3
+            THEN 'Reseñas Insuficientes'
+            ELSE ROUND(AVG(CASE WHEN users.status != 1 THEN reviews.rating ELSE NULL END), 1)
+        END
+        AS rating"
+      )
+      .group("books.id")
   end
 
   # GET /books/1

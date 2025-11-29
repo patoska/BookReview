@@ -65,6 +65,7 @@ RSpec.describe "Reviews", type: :request do
         {
           review: {
             rating: 8,
+            body: "".ljust(1001),
             user_id: 1,
             book_id: 1
           }
@@ -81,6 +82,7 @@ RSpec.describe "Reviews", type: :request do
         expect(json["book"][0]).to include("must exist")
         expect(json["user"][0]).to include("must exist")
         expect(json["rating"][0]).to include("must be less than or equal to 5")
+        expect(json["body"][0]).to include("is too long (maximum is 1000 characters)")
       end
     end
   end

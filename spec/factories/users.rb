@@ -5,6 +5,10 @@ FactoryBot.define do
 
   factory :user do
     email
-    status { 1 }
+    status { 0 }
+
+    trait :banned do
+      status { 1 }
+    end
   end
 end

@@ -42,7 +42,20 @@ class BooksController < ApplicationController
   private
 
   def set_book
-    @book = Book.find(params.expect(:id))
+    @book = Book.left_joins(reviews: :user)
+      .select(
+        "books.*,
+        CASE
+          WHEN SUM(CASE WHEN users.status != 1 THEN 1 ELSE 0 END) < 3
+            THEN 'Reseñas Insuficientes'
+            ELSE ROUND(AVG(CASE WHEN users.status != 1 THEN reviews.rating ELSE NULL END), 1)
+        END
+        AS rating"
+      )
+      .where("books.id = ?", params.expect(:id))
+      .group("books.id")
+      .first
+    head :not_found unless @book
   end
 
   def book_params

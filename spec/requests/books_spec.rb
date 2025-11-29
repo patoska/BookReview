@@ -29,6 +29,48 @@ RSpec.describe "Books", type: :request do
       expect(json['title']).to eq(book1.title)
       expect(json['id']).not_to eq(book2.id)
     end
+
+    context "with reviews" do
+      let (:book1) { create(:book) }
+
+      before(:each) do
+        review1 = create(:review, book: book1, rating: 5, user: create(:user))
+        review2 = create(:review, book: book1, rating: 5, user: create(:user))
+        review3 = create(:review, book: book1, rating: 5, user: create(:user))
+        review4 = create(:review, book: book1, rating: 2, user: create(:user))
+      end
+
+      context "of valid users" do
+        it "shows the correct average rating" do
+          get "/books/#{book1.id}"
+          json = JSON.parse(response.body)
+          expect(json['rating']).to eq(4.3)
+        end
+      end
+
+      context "of banned users" do
+        it "ignores the reviews from banned users" do
+          review4 = create(:review, book: book1, rating: 2, user: create(:user, :banned))
+          get "/books/#{book1.id}"
+          json = JSON.parse(response.body)
+
+
+          expect(json['rating']).to eq(4.3)
+        end
+      end
+
+      context "less than 3" do
+        it "shows the correct average rating" do
+          book1.reviews.last.destroy
+          book1.reviews.last.destroy
+
+          get "/books/#{book1.id}"
+          json = JSON.parse(response.body)
+
+          expect(json['rating']).to eq("Reseñas Insuficientes")
+        end
+      end
+    end
   end
 
   describe "POST /books" do

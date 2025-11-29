@@ -1,5 +1,9 @@
 FactoryBot.define do
+  sequence :title do |n|
+    "title_#{n}"
+  end
+
   factory :book do
-    title { "MyString" }
+    title
   end
 end
